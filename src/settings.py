@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     kafka_bootstrap_servers: str = "localhost:9092"
     kafka_topic_ads: str = "ads"
     auth_service_url: str = "http://localhost:8000"
+    kafka_brokers: str = "kafka.kafka.svc.cl"
 
     @property
     def database_url(self) -> str:
