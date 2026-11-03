@@ -1,18 +1,13 @@
-FROM python:3.13-slim-bookworm
+FROM python:3.13-slim-bookworm AS builder
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
-    UV_NO_DEV=1 \
-    UV_FROZEN=1 \
-    PYTHONPATH=/app \
-    PATH="/root/.local/bin:$PATH"
+    UV_PYTHON_PREFERENCE=only-system \
+    VIRTUAL_ENV=/opt/venv
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl ca-certificates \
-    && rm -rf /var/lib/apt/lists/* \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN pip install --no-cache-dir uv
 
 WORKDIR /app
 
@@ -23,6 +18,22 @@ COPY . .
 
 RUN uv sync --frozen --no-dev
 
-EXPOSE 8002
+FROM python:3.13-slim-bookworm
 
-CMD ["uv", "run", "python", "-m", "bin.api"]
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app \
+    PATH="/opt/venv/bin:$PATH"
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY --from=builder /opt/venv /opt/venv
+COPY --from=builder /app /app
+
+EXPOSE 8000
+
+CMD ["python", "-m", "bin.api"]
