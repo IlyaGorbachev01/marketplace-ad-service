@@ -13,6 +13,7 @@ wheels/
 .env
 
 CLAUDE.md
+AGENTS.md
 
 # macOS
 .DS_Store

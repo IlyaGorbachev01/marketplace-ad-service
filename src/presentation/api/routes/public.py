@@ -6,6 +6,7 @@ from src.presentation.api.dependencies import (
     CurrentUserIdDep,
     DeleteAdDep,
     GetAdDep,
+    IncrementAdViewsDep,
     ListAdsDep,
     UpdateAdDep,
 )
@@ -61,8 +62,10 @@ async def list_my_ads(
 async def get_ad(
     ad_id: int,
     usecase: GetAdDep,
+    increment_views: IncrementAdViewsDep,
 ) -> AdResponse:
     try:
+        await increment_views.execute(ad_id)
         view = await usecase.execute(ad_id)
     except AdNotFoundError:
         raise HTTPException(

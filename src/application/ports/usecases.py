@@ -54,6 +54,14 @@ class GetAdPort(ABC):
     ) -> AdView: ...
 
 
+class IncrementAdViewsPort(ABC):
+    @abstractmethod
+    async def execute(
+        self,
+        ad_id: int,
+    ) -> Ad: ...
+
+
 class GetAdInternalPort(ABC):
     @abstractmethod
     async def execute(

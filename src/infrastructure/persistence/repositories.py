@@ -84,6 +84,7 @@ class SQLAlchemyAdRepository(AdRepository):
                 category=ad.category,
                 city=ad.city,
                 status=ad.status.value,
+                views=ad.views,
                 updated_at=ad.updated_at,
             )
         )

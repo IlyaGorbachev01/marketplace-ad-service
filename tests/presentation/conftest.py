@@ -13,6 +13,7 @@ from src.presentation.api.dependencies import (
 from src.presentation.api.routes.internal import router as internal_router
 from src.presentation.api.routes.public import router as public_router
 from src.settings import Settings
+from src.tracing import TraceIdMiddleware
 from tests.conftest import FakeUnitOfWork, FakeUserProfileService
 
 JWT_SECRET = "test-secret-key-that-is-long-enough"
@@ -38,6 +39,7 @@ def app(
     fake_user_profile: FakeUserProfileService,
 ) -> FastAPI:
     app = FastAPI()
+    app.add_middleware(TraceIdMiddleware)
     app.include_router(public_router)
     app.include_router(internal_router)
 

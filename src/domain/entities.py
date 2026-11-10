@@ -63,6 +63,11 @@ class Ad:
         self.status = AdStatus.ARCHIVED
         self.updated_at = datetime.now(UTC)
 
+    def increment_views(self) -> None:
+        if self.status == AdStatus.ARCHIVED:
+            raise AdAlreadyArchivedError
+        self.views += 1
+
 
 def _validate_fields(
     *,

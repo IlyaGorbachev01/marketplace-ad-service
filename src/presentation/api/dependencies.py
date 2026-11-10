@@ -11,6 +11,7 @@ from src.application.ports.usecases import (
     DeleteAdPort,
     GetAdInternalPort,
     GetAdPort,
+    IncrementAdViewsPort,
     ListAdsPort,
     UpdateAdPort,
 )
@@ -19,6 +20,7 @@ from src.application.usecases.create_ad import CreateAd
 from src.application.usecases.delete_ad import DeleteAd
 from src.application.usecases.get_ad import GetAd
 from src.application.usecases.get_ad_internal import GetAdInternal
+from src.application.usecases.increment_ad_views import IncrementAdViews
 from src.application.usecases.list_ads import ListAds
 from src.application.usecases.update_ad import UpdateAd
 from src.infrastructure.persistence.uow import SQLAlchemyUnitOfWork
@@ -118,6 +120,12 @@ def get_get_ad_internal(
     return GetAdInternal(uow)
 
 
+def get_increment_ad_views(
+    uow: UowDep,
+) -> IncrementAdViewsPort:
+    return IncrementAdViews(uow)
+
+
 def get_list_ads(
     uow: UowDep,
     user_profile: UserProfileServiceDep,
@@ -130,4 +138,5 @@ UpdateAdDep = Annotated[UpdateAdPort, Depends(get_update_ad)]
 DeleteAdDep = Annotated[DeleteAdPort, Depends(get_delete_ad)]
 GetAdDep = Annotated[GetAdPort, Depends(get_get_ad)]
 GetAdInternalDep = Annotated[GetAdInternalPort, Depends(get_get_ad_internal)]
+IncrementAdViewsDep = Annotated[IncrementAdViewsPort, Depends(get_increment_ad_views)]
 ListAdsDep = Annotated[ListAdsPort, Depends(get_list_ads)]
